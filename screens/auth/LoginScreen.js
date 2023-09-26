@@ -16,9 +16,21 @@ export default function LoginScreen() {
   const [isEmailOnFocus, setIsEmailOnFocus] = useState(false);
   const [isPasswordOnFocus, setIsPasswordOnFocus] = useState(false);
 
+  const initialState = {
+    email: "",
+    password: "",
+  };
+
+  const [state, setState] = useState(initialState);
+
   const hideKeyBoard = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const onSubmit = () => {
+    console.log(state);
+    setState(initialState);
   };
 
   return (
@@ -50,6 +62,10 @@ export default function LoginScreen() {
                 onBlur={() => {
                   setIsEmailOnFocus(false);
                 }}
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, email: value }))
+                }
               ></TextInput>
             </View>
             <View
@@ -72,6 +88,10 @@ export default function LoginScreen() {
                 onBlur={() => {
                   setIsPasswordOnFocus(false);
                 }}
+                value={state.password}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, password: value }))
+                }
               ></TextInput>
               <TouchableOpacity style={styles.showPassBtn}>
                 <Text
@@ -88,7 +108,7 @@ export default function LoginScreen() {
 
             {!isShowKeyboard && (
               <>
-                <TouchableOpacity style={styles.btn} onPress={hideKeyBoard}>
+                <TouchableOpacity style={styles.btn} onPress={onSubmit}>
                   <Text style={styles.btnText}>Увійти</Text>
                 </TouchableOpacity>
                 <Text

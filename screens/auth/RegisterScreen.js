@@ -18,9 +18,22 @@ export default function RegisterScreen() {
   const [isEmailOnFocus, setIsEmailOnFocus] = useState(false);
   const [isPasswordOnFocus, setIsPasswordOnFocus] = useState(false);
 
+  const initialState = {
+    login: "",
+    email: "",
+    password: "",
+  };
+
+  const [state, setState] = useState(initialState);
+
   const hideKeyBoard = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const onSubmit = () => {
+    console.log(state);
+    setState(initialState);
   };
 
   return (
@@ -78,6 +91,10 @@ export default function RegisterScreen() {
                   setIsLoginOnFocus(false);
                 }}
                 placeholder="Логін"
+                value={state.login}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, login: value }))
+                }
               ></TextInput>
             </View>
             <View style={{ marginBottom: 16 }}>
@@ -94,6 +111,10 @@ export default function RegisterScreen() {
                 onBlur={() => {
                   setIsEmailOnFocus(false);
                 }}
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, email: value }))
+                }
               ></TextInput>
             </View>
             <View
@@ -116,6 +137,13 @@ export default function RegisterScreen() {
                 onBlur={() => {
                   setIsPasswordOnFocus(false);
                 }}
+                value={state.password}
+                onChangeText={(value) =>
+                  setState((prevState) => ({
+                    ...prevState,
+                    password: value,
+                  }))
+                }
               ></TextInput>
               <TouchableOpacity style={styles.showPassBtn}>
                 <Text
@@ -132,7 +160,7 @@ export default function RegisterScreen() {
 
             {!isShowKeyboard && (
               <>
-                <TouchableOpacity style={styles.btn} onPress={hideKeyBoard}>
+                <TouchableOpacity style={styles.btn} onPress={onSubmit}>
                   <Text style={styles.btnText}>Зареєструватись</Text>
                 </TouchableOpacity>
                 <Text
