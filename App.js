@@ -37,8 +37,8 @@ export default function App() {
   }
   return (
     <>
-      {/* <RegisterScreen /> */}
-      <LoginScreen />
+      <RegisterScreen />
+      {/* <LoginScreen /> */}
     </>
   );
 }
