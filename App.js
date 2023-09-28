@@ -1,29 +1,16 @@
-// import { StatusBar } from "expo-status-bar";
-// import { StyleSheet, Text, View } from "react-native";
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
-
 import React from "react";
 import { useFonts } from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import RegisterScreen from "./screens/auth/RegisterScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
+import RegisterScreen from "./screens/auth/RegisterScreen";
+import Home from "./screens/user/Home";
+import CommentsScreen from "./screens/user/CommentsScreen";
+
+const AuthStack = createStackNavigator();
+const MainTab = createBottomTabNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -37,8 +24,26 @@ export default function App() {
   }
   return (
     <>
-      <RegisterScreen />
-      {/* <LoginScreen /> */}
+      {/* <CommentsScreen /> */}
+      <NavigationContainer>
+        <AuthStack.Navigator initialRouteName="Login">
+          <AuthStack.Screen
+            name="login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <AuthStack.Screen
+            name="register"
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
+          <AuthStack.Screen
+            name="home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+        </AuthStack.Navigator>
+      </NavigationContainer>
     </>
   );
 }

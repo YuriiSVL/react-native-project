@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -29,9 +30,12 @@ export default function LoginScreen() {
     Keyboard.dismiss();
   };
 
+  const navigation = useNavigation();
+
   const onSubmit = () => {
     console.log(state);
     setState(initialState);
+    navigation.navigate("home");
   };
 
   return (
@@ -113,15 +117,20 @@ export default function LoginScreen() {
                   <TouchableOpacity style={styles.btn} onPress={onSubmit}>
                     <Text style={styles.btnText}>Увійти</Text>
                   </TouchableOpacity>
-                  <Text
-                    style={{
-                      fontFamily: "Roboto",
-                      fontSize: 16,
-                      color: "#1B4371",
-                    }}
+
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("register")}
                   >
-                    Немає акаунту? Зареєструватися
-                  </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Roboto",
+                        fontSize: 16,
+                        color: "#1B4371",
+                      }}
+                    >
+                      Немає акаунту? Зареєструватися
+                    </Text>
+                  </TouchableOpacity>
                 </>
               )}
             </View>

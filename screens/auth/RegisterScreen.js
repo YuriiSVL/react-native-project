@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function RegisterScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -35,7 +36,10 @@ export default function RegisterScreen() {
   const onSubmit = () => {
     console.log(state);
     setState(initialState);
+    navigation.navigate("home");
   };
+
+  const navigation = useNavigation();
 
   return (
     <TouchableWithoutFeedback onPress={hideKeyBoard}>
@@ -165,15 +169,19 @@ export default function RegisterScreen() {
                   <TouchableOpacity style={styles.btn} onPress={onSubmit}>
                     <Text style={styles.btnText}>Зареєструватись</Text>
                   </TouchableOpacity>
-                  <Text
-                    style={{
-                      fontFamily: "Roboto",
-                      fontSize: 16,
-                      color: "#1B4371",
-                    }}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("login")}
                   >
-                    Вже є акаунт? Увійти
-                  </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Roboto",
+                        fontSize: 16,
+                        color: "#1B4371",
+                      }}
+                    >
+                      Вже є акаунт? Увійти
+                    </Text>
+                  </TouchableOpacity>
                 </>
               )}
             </View>
