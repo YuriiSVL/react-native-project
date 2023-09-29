@@ -8,6 +8,7 @@ import LoginScreen from "./screens/auth/LoginScreen";
 import RegisterScreen from "./screens/auth/RegisterScreen";
 import Home from "./screens/user/Home";
 import CommentsScreen from "./screens/user/CommentsScreen";
+import MapScreen from "./screens/user/MapScreen";
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -24,7 +25,7 @@ export default function App() {
   }
   return (
     <>
-      {/* <CommentsScreen /> */}
+      {/* <MapScreen /> */}
       <NavigationContainer>
         <AuthStack.Navigator initialRouteName="Login">
           <AuthStack.Screen

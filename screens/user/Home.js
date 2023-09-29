@@ -4,6 +4,8 @@ import ProfileScreen from "../user/ProfileScreen";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 import PostsScreen from "../user/PostsScreen";
+import CommentsScreen from "./CommentsScreen";
+import MapScreen from "./MapScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,6 +61,24 @@ export default function Home() {
           tabBarIcon: () => <Feather name="user" size={24} color="#212121CC" />,
         }}
       />
+      <Tab.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{
+          tabBarIcon: () => null,
+          tabBarButton: () => null,
+          tabBarStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarIcon: () => null,
+          tabBarButton: () => null,
+          tabBarStyle: { display: "none" },
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -66,10 +86,10 @@ const styles = StyleSheet.create({
   addPostBtn: {
     width: 70,
     height: 40,
-    backgroundColor: "#FF6C00",
-    borderRadius: 20,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#FF6C00",
+    borderRadius: 20,
   },
 });

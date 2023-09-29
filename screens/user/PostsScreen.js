@@ -1,10 +1,27 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  FlatList,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Feather } from "@expo/vector-icons";
 import ProfilePic from "../../assets/images/profilePic.jpg";
 
-export default function PostsScreen() {
+export default function PostsScreen({ route }) {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    if (route.params) {
+      setPosts((prevState) => [...prevState, route.params]);
+    }
+    // console.log(posts);
+  }, [route.params]);
+
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -29,6 +46,64 @@ export default function PostsScreen() {
             <Text style={styles.profileEmail}>email@example.com</Text>
           </View>
         </View>
+        <FlatList
+          data={posts}
+          keyExtractor={(item, indx) => indx.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.postBox}>
+              <Image source={{ uri: item.pic }} style={styles.postPic} />
+              <Text
+                style={{
+                  marginBottom: 8,
+                  fontFamily: "RobotoMedium",
+                  fontSize: 16,
+                  color: "#212121",
+                }}
+              >
+                {item.title}
+              </Text>
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Comments");
+                  }}
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                >
+                  <Feather name="message-circle" size={24} color="#BDBDBD" />
+                  <Text
+                    style={{ fontSize: 16, color: "#BDBDBD", marginLeft: 6 }}
+                  >
+                    0
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Map", { item });
+                  }}
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                >
+                  <Feather name="map-pin" size={24} color="#BDBDBD" />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: "#212121",
+                      marginLeft: 6,
+                      textDecorationLine: "underline",
+                    }}
+                  >
+                    {item.locationName}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -85,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
-  postWrapper: {
+  postBox: {
     marginBottom: 34,
   },
   postTitle: {

@@ -12,7 +12,7 @@ import {
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 
-export default function CommentsScreen() {
+export default function CommentsScreen({ navigation }) {
   const [comment, setComment] = useState("");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
 

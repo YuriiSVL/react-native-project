@@ -8,23 +8,46 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Image,
 } from "react-native";
 import { AntDesign, Feather } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 
-export default function CreatePostsScreen() {
-  const navigation = useNavigation();
+import { Camera } from "expo-camera";
+import * as Location from "expo-location";
+
+export default function CreatePostsScreen({ navigation }) {
   const [title, setTitle] = useState("");
   const [locationName, setLocationName] = useState("");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [camera, setCamera] = useState(null);
+  const [pic, setPic] = useState(null);
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     if (!isKeyboardShown) {
       Keyboard.dismiss();
     }
   }, [isKeyboardShown]);
+
+  const takePhoto = async () => {
+    const photo = await camera.takePictureAsync();
+    const location = await Location.getCurrentPositionAsync();
+    setPic(photo.uri);
+    setLocation(location.coords);
+  };
+
+  const sendPhoto = () => {
+    if (pic === null || title === "" || locationName === "") {
+      console.log("empty fields");
+      return;
+    }
+    navigation.navigate("Posts", { pic, title, locationName, location });
+    setTitle("");
+    setLocationName("");
+    setPic(null);
+  };
 
   return (
     <TouchableWithoutFeedback
@@ -49,13 +72,21 @@ export default function CreatePostsScreen() {
         <View
           style={{ ...styles.body, paddingBottom: isKeyboardShown ? 16 : 0 }}
         >
-          <View style={styles.uploadPicBg}>
+          <Camera style={styles.uploadPicBg} ref={setCamera}>
+            {pic && (
+              <View style={styles.takePhotoContainer}>
+                <Image
+                  source={{ uri: pic }}
+                  style={{ height: 100, width: 100 }}
+                />
+              </View>
+            )}
             <View style={styles.addPhotoIcon}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={takePhoto}>
                 <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
               </TouchableOpacity>
             </View>
-          </View>
+          </Camera>
           <Text style={styles.uploadText}>Завантажте фото</Text>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -92,7 +123,9 @@ export default function CreatePostsScreen() {
           </KeyboardAvoidingView>
 
           <TouchableOpacity style={styles.publicateBtn}>
-            <Text style={styles.publicateBtnText}>Опублікувати</Text>
+            <Text style={styles.publicateBtnText} onPress={sendPhoto}>
+              Опублікувати
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -221,5 +254,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "40%",
     left: "40%",
+  },
+
+  takePhotoContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    borderBlockColor: "#fff",
+    borderWidth: 1,
   },
 });
