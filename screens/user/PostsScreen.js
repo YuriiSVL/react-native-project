@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { authLogOut } from "../../redux/auth/authOperations";
 
 import {
   StyleSheet,
@@ -15,6 +17,9 @@ import ProfilePic from "../../assets/images/profilePic.jpg";
 
 export default function PostsScreen({ route }) {
   const [posts, setPosts] = useState([]);
+  const { userId } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [...prevState, route.params]);
@@ -30,7 +35,7 @@ export default function PostsScreen({ route }) {
         <TouchableOpacity
           style={{ marginLeft: "auto" }}
           onPress={() => {
-            navigation.navigate("login");
+            dispatch(authLogOut());
           }}
         >
           <Text>

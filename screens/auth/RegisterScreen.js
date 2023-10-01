@@ -1,6 +1,7 @@
 import React from "react";
 import Svg, { Circle, Path } from "react-native-svg";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -13,6 +14,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { authRegister } from "../../redux/auth/authOperations";
 
 export default function RegisterScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -20,13 +22,19 @@ export default function RegisterScreen() {
   const [isEmailOnFocus, setIsEmailOnFocus] = useState(false);
   const [isPasswordOnFocus, setIsPasswordOnFocus] = useState(false);
 
-  const initialState = {
-    login: "",
-    email: "",
-    password: "",
-  };
+  const dispatch = useDispatch();
 
-  const [state, setState] = useState(initialState);
+  // const initialState = {
+  //   login: "",
+  //   email: "",
+  //   password: "",
+  // };
+
+  // const [state, setState] = useState(initialState);
+
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const hideKeyBoard = () => {
     setIsShowKeyboard(false);
@@ -34,9 +42,15 @@ export default function RegisterScreen() {
   };
 
   const onSubmit = () => {
-    console.log(state);
-    setState(initialState);
-    navigation.navigate("home");
+    if (login === "" || email === "" || password === "") {
+      return;
+    }
+    // console.log(state);
+    // dispatch(authRegister(state));
+    // setState(initialState);
+    console.log(login, email, password);
+    dispatch(authRegister({ login, email, password }));
+    navigation.navigate("Home");
   };
 
   const navigation = useNavigation();
@@ -97,10 +111,8 @@ export default function RegisterScreen() {
                     setIsLoginOnFocus(false);
                   }}
                   placeholder="Логін"
-                  value={state.login}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, login: value }))
-                  }
+                  value={login}
+                  onChangeText={setLogin}
                 ></TextInput>
               </View>
               <View style={{ marginBottom: 16 }}>
@@ -117,10 +129,8 @@ export default function RegisterScreen() {
                   onBlur={() => {
                     setIsEmailOnFocus(false);
                   }}
-                  value={state.email}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  value={email}
+                  onChangeText={setEmail}
                 ></TextInput>
               </View>
               <View
@@ -143,13 +153,8 @@ export default function RegisterScreen() {
                   onBlur={() => {
                     setIsPasswordOnFocus(false);
                   }}
-                  value={state.password}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({
-                      ...prevState,
-                      password: value,
-                    }))
-                  }
+                  value={password}
+                  onChangeText={setPassword}
                 ></TextInput>
                 <TouchableOpacity style={styles.showPassBtn}>
                   <Text
@@ -170,7 +175,7 @@ export default function RegisterScreen() {
                     <Text style={styles.btnText}>Зареєструватись</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("login")}
+                    onPress={() => navigation.navigate("Login")}
                   >
                     <Text
                       style={{

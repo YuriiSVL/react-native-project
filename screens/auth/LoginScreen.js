@@ -13,17 +13,25 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import { authLogIn } from "../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
+
 export default function LoginScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isEmailOnFocus, setIsEmailOnFocus] = useState(false);
   const [isPasswordOnFocus, setIsPasswordOnFocus] = useState(false);
 
-  const initialState = {
-    email: "",
-    password: "",
-  };
+  const dispatch = useDispatch();
 
-  const [state, setState] = useState(initialState);
+  // const initialState = {
+  //   email: "",
+  //   password: "",
+  // };
+
+  // const [state, setState] = useState(initialState);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const hideKeyBoard = () => {
     setIsShowKeyboard(false);
@@ -33,9 +41,16 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const onSubmit = () => {
-    console.log(state);
-    setState(initialState);
-    navigation.navigate("home");
+    if (email === "" || password === "") {
+      return;
+    }
+
+    // console.log(state);
+    dispatch(authLogIn({ email, password }));
+    // setState(initialState);
+    setEmail("");
+    setPassword("");
+    navigation.navigate("Home", { email, password });
   };
 
   return (
@@ -68,10 +83,8 @@ export default function LoginScreen() {
                   onBlur={() => {
                     setIsEmailOnFocus(false);
                   }}
-                  value={state.email}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  value={email}
+                  onChangeText={setEmail}
                 ></TextInput>
               </View>
               <View
@@ -94,10 +107,8 @@ export default function LoginScreen() {
                   onBlur={() => {
                     setIsPasswordOnFocus(false);
                   }}
-                  value={state.password}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
+                  value={password}
+                  onChangeText={setPassword}
                 ></TextInput>
                 <TouchableOpacity style={styles.showPassBtn}>
                   <Text
@@ -119,7 +130,7 @@ export default function LoginScreen() {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("register")}
+                    onPress={() => navigation.navigate("Register")}
                   >
                     <Text
                       style={{
